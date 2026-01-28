@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+* {
+    font-family: "Poppins";
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+p {
+    font-weight: 300;
+    color: rgba(130, 130, 130, 1);
+}
+
+@layer utilities {
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: none;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: gray;
+        border-radius: 10px;
+    }
+
+    .related-items-scrollbar::-webkit-scrollbar {
+        height: 5px;
+    }
+    .related-items-scrollbar::-webkit-scrollbar-track {
+        background: none;
+    }
+
+
+    .related-items-scrollbar::-webkit-scrollbar-thumb {
+        background-color: gray;
+        border-radius: 10px;
+    }
+
+}
+
+@theme {
+
+
+    /* Red */
+    --color-red-1: rgba(254, 215, 215, 1);
+    --color-red-4: rgba(239, 73, 73, 1);
+    --color-red-5: rgba(229, 62, 62, 1);
+
+    /* Blue */
+    --color-blue: rgba(0, 157, 221, 1);
+
+    /* Black */
+    --color-black: rgba(0, 0, 0, 1);
+
+    /* Gray */
+    --color-dark-gray: rgba(74, 85, 101, 1.0);
+    --color-light-gray: rgba(189, 189, 189, 1);
+
+    /* White  */
+    --color-white: rgba(255, 255, 255, 1);
+
+    /* Green */
+    --color-green-2: rgba(39, 174, 96, 1);
+    --color-green-5: rgba(0, 178, 39, 1);
+
+
+    /* Font Family */
+    --font-primary: "Inter";
+    --font-crimson: "Crimson Text";
+
+
+
+
+}
