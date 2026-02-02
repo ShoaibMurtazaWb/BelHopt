@@ -30,28 +30,20 @@ p {
         width: 5px;
     }
 
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: none;
-    }
-
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: gray;
-        border-radius: 10px;
-    }
-
-    .related-items-scrollbar::-webkit-scrollbar {
-        height: 5px;
-    }
+    .custom-scrollbar::-webkit-scrollbar-track,
     .related-items-scrollbar::-webkit-scrollbar-track {
         background: none;
     }
 
-
+    .custom-scrollbar::-webkit-scrollbar-thumb,
     .related-items-scrollbar::-webkit-scrollbar-thumb {
         background-color: gray;
         border-radius: 10px;
     }
 
+    .related-items-scrollbar::-webkit-scrollbar {
+        height: 8px;
+    }
 }
 
 @theme {

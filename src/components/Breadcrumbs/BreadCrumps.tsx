@@ -1,43 +1,67 @@
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useQueryState } from "nuqs";
+import { useProduct } from "../../hooks/useProducts";
+
+// helper → Title Case
+const toTitleCase = (str: string) =>
+    str
+        .split("-")
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
 
 export default function Breadcrumbs() {
     const location = useLocation();
-    const params = useParams();
+    const params = useParams<{ id?: string; category?: string }>();
+
     const [search] = useQueryState("search");
+    const [category] = useQueryState("category");
+
+    // 🔹 fetch product title for breadcrumb
+    const { data: product } = useProduct(
+        params.id ? Number(params.id) : undefined
+    );
+
+    // ❌ Hide breadcrumbs on pure Home
+    const isPureHome =
+        location.pathname === "/" &&
+        !search &&
+        !category;
+
+    if (isPureHome) return null;
 
     const crumbs: { label: string; to?: string }[] = [
         { label: "Home", to: "/" },
     ];
 
-    // SEARCH
+    // 🔍 SEARCH
     if (search) {
         crumbs.push({
             label: `Search: "${search}"`,
         });
     }
 
-    // CATEGORY
-    if (location.pathname.startsWith("/category") && params.category) {
+    // 📦 CATEGORY (Home OR category page)
+    const activeCategory = params.category || category;
+    if (activeCategory) {
         crumbs.push({
-            label: params.category,
-            to: `/category/${params.category}`,
+            label: toTitleCase(activeCategory),
+            to: `/category/${activeCategory}`,
         });
     }
 
-    // PRODUCT
-    if (location.pathname.startsWith("/product") && params.id) {
+    // 🛒 PRODUCT (use real title)
+    if (params.id && product) {
         crumbs.push({
-            label: `Product ${params.id}`,
+            label: product.title,
         });
     }
 
-    // CART
+    // 🧺 CART
     if (location.pathname === "/cart") {
         crumbs.push({ label: "Cart" });
     }
 
-    // CHECKOUT
+    // 💳 CHECKOUT
     if (location.pathname === "/checkout") {
         crumbs.push({ label: "Checkout" });
     }
@@ -59,7 +83,6 @@ export default function Breadcrumbs() {
                                 {crumb.label}
                             </span>
                         )}
-
                         {index < crumbs.length - 1 && <span>/</span>}
                     </li>
                 ))}

@@ -5,4 +5,6 @@ export const ROUTES = {
   CATEGORY: (category: string) => `/category/${category}`,
   CART: "/cart",
   CHECKOUT: "/checkout",
+  RECIPES: '/recipes'
+  
 };

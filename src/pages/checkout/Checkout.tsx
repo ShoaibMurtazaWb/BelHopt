@@ -1,7 +1,7 @@
 import { useState } from "react";
 import MainHeader from "../../components/Headers/MainHeader";
 import Button from "../../components/Button";
-import { useCart } from "../../components/cart/CartContext";
+import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { MapPin, Trash } from "lucide-react";
 

@@ -1,6 +1,6 @@
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../cart/CartContext";
+import { useCart } from "../../context/CartContext";
 import type { Product } from "../../lib/types";
 
 
@@ -19,17 +19,17 @@ export default function ProductCard({
   const isAdded = quantity > 0;
 
   return (
-    <div className="flex flex-col grow p-5 shrink-0 max-w-60 gap-4 justify-center items-center cursor-pointer" onClick={() => navigate(`/product/${product.id}`)}>
+    <div className="flex flex-col grow p-5 shrink-0 max-w-65  gap-4 justify-center items-center cursor-pointer" onClick={() => navigate(`/product/${product.id}`)}>
       {/* Product Image and Add Button */}
       <div className="flex w-full py-5 items-center relative ">
-        <img src={product.thumbnail} alt={product.title} />
+        <img width={200} height={200} src={product.thumbnail} alt={product.title}/>
         {!isAdded ? (
           /* ADD BUTTON */
           <button
             className="absolute ml-5 right-0 bottom-0 bg-white p-4 text-3xl font-bold rounded-full cursor-pointer shadow-md shadow-gray-400 hover:cursor-pointer hover:shadow-lg hover:shadow-gray-400 active:scale-90 transition-transform"
             onClick={(e) => {
               e.stopPropagation();
-              addItem({ ...product });
+              addItem({ ...product, quantity: 1, total: product.price, discountedTotal: product.price });
             }}
           >
             <PlusIcon />
@@ -40,7 +40,7 @@ export default function ProductCard({
             e.stopPropagation();
           }}>
             <button
-              className="bg-red-500 text-white w-10 h-10 rounded-full flex cursor-pointer items-center justify-center"
+              className="bg-red-500 text-white min-w-10 h-10 rounded-full flex cursor-pointer items-center justify-center"
               onClick={(e) => { e.stopPropagation(); decrease(product.id) }}
             >
               <MinusIcon />
@@ -67,7 +67,6 @@ export default function ProductCard({
       <div className="w-full flex flex-col ">
         {/* Price Div*/}
 
-        {/* Currency */}
         <div>
           <p className="text-2xl font-semibold! text-black!">
             <sup className="text-md font-normal mr-1  ">$</sup>
@@ -85,7 +84,7 @@ export default function ProductCard({
             {product.weight} lbs
           </p>
           <p className="font-crimson! text-lg font-light ">
-            ($ {product.price / product.weight}/lb)
+            ($ {(product.price / product.weight).toFixed(2)}/lb)
           </p>
         </div>
 

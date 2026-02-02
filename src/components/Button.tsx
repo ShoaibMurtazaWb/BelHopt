@@ -29,7 +29,7 @@ export default function Button({
     <button
       disabled={disabled || loading}
       className={clsx(
-        "inline-flex items-center justify-center font-semibold rounded-full transition",
+        "inline-flex items-center justify-center font-semibold rounded-full transition hover:cursor-pointer",
 
         // 🔹 Variants
         variant === "primary" &&

@@ -3,7 +3,9 @@ import { fetchProducts } from "../api/fetchProducts";
 import api from "../api/axios";
 import type { PaginatedProducts, Product } from "../lib/types";
 
-const tranformPaginatedQueryRespons = (data: PaginatedProducts | undefined) => {
+const transformPaginatedQueryResponse = (
+  data: PaginatedProducts | undefined,
+) => {
   return {
     data: data?.products ?? [],
     pagination: {
@@ -14,9 +16,6 @@ const tranformPaginatedQueryRespons = (data: PaginatedProducts | undefined) => {
   };
 };
 
-
-
-
 export function useProducts({
   category,
   search,
@@ -25,21 +24,19 @@ export function useProducts({
   search?: string;
 }) {
   const { data, ...query } = useQuery({
-    queryKey: ["products", { category, search }],
+    queryKey: ["products", { category: category, search: search }],
     queryFn: async () => await fetchProducts({ category, search }),
   });
 
   return {
     ...query,
-    ...tranformPaginatedQueryRespons(data),
+    ...transformPaginatedQueryResponse(data),
   };
 }
 
-
-
 export const useProduct = (productId: number | undefined) => {
   return useQuery({
-    queryKey: ["products", productId],
+    queryKey: ["products", { id: productId }],
     enabled: Boolean(productId),
     queryFn: async () => {
       const res = await api.get<Product>("/products/" + productId);
@@ -47,8 +44,6 @@ export const useProduct = (productId: number | undefined) => {
     },
   });
 };
-
-
 
 export const useProductsByCategory = (category: string | undefined) => {
   const { data, ...query } = useQuery({
@@ -63,6 +58,6 @@ export const useProductsByCategory = (category: string | undefined) => {
   });
   return {
     ...query,
-    ...tranformPaginatedQueryRespons(data),
+    ...transformPaginatedQueryResponse(data),
   };
 };

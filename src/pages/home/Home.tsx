@@ -1,24 +1,24 @@
-import { useState } from "react";
 import Products from "../../components/product/Products";
 import HeroBanner from "./HeroBanner";
 import { useCategories } from "../../hooks/useCategories";
 import MainHeader from "../../components/Headers/MainHeader";
 import Footer from "../../components/Footer/Footer";
 import { useQueryState } from "nuqs";
-// import { useParams } from "react-router-dom";
 
 export default function Home() {
   const { data: categories = [] } = useCategories();
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [category, setCategory] = useQueryState("category", {
+    defaultValue: "All",
+  });
   const [search] = useQueryState("search");
-  // const { category } = useParams<{ category?: string }>();
+
 
   return (
     <>
       <MainHeader />
       <HeroBanner />
 
-      <section className="flex max-w-[2800px] mx-auto">
+      <section className="flex max-w-mx-auto">
         {/* Sidebar */}
         <aside className="w-110 flex flex-col gap-6 h-screen border-r border-l border-b pl-20 pr-1 py-10 border-light-gray">
           <h2>Categories</h2>
@@ -27,9 +27,9 @@ export default function Home() {
             {/* ALL */}
             <li key="All">
               <button
-                onClick={() => setSelectedCategory("All")}
+                onClick={() => setCategory("")}
                 className={`flex items-center gap-4 w-full text-left
-                  ${selectedCategory === "All"
+                  ${category === ""
                     ? "font-semibold text-red-500"
                     : ""
                   }`}
@@ -46,9 +46,9 @@ export default function Home() {
             {categories.map((cat) => (
               <li key={cat.slug}>
                 <button
-                  onClick={() => setSelectedCategory(cat.slug)}
+                  onClick={() => setCategory(cat.slug)}
                   className={`flex items-center gap-4 w-full text-left
-                    ${selectedCategory === cat.slug
+                    ${category === cat.slug
                       ? "font-semibold text-red-500"
                       : ""
                     }`}
@@ -67,14 +67,15 @@ export default function Home() {
         {/* Products */}
         <main className="flex flex-col w-full py-10 px-15">
           <h1 className="mb-6 capitalize">
-            {selectedCategory === "All"
+            {category === "All"
               ? "All Products"
-              : selectedCategory.replace("-", " ")}
+              : category.replace("-", " ")}
           </h1>
 
           <Products
-  category={search ? undefined : selectedCategory}
-/>        </main>
+            category={search ? undefined : category}
+          />
+        </main>
       </section>
 
       <Footer />

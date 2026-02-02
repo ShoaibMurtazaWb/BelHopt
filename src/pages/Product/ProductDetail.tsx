@@ -4,7 +4,7 @@ import Button from "../../components/Button";
 import MainHeader from "../../components/Headers/MainHeader";
 import ProductCard from "../../components/product/ProductCard";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
-import { useCart } from "../../components/cart/CartContext";
+import { useCart } from "../../context/CartContext";
 import { useProduct, useProductsByCategory } from "../../hooks/useProducts";
 
 export default function ProductDetail() {
@@ -124,6 +124,9 @@ export default function ProductDetail() {
                                 onClick={() =>
                                     addItem({
                                         ...product,
+                                        quantity: 1,
+                                        total: product.price,
+                                        discountedTotal: product.price,
                                     })
                                 }
                             >
@@ -139,7 +142,7 @@ export default function ProductDetail() {
                     </div>
                 </div>
 
-                
+
                 {/*  Product Detail */}
 
                 <div className="mt-5 ">
@@ -152,15 +155,15 @@ export default function ProductDetail() {
                         </div>
                         <div>
                             <h3>Reviews:</h3>
-                            <p>{product.reviews.map(rev => (
-                                <div>
+                            <div>{product.reviews.map((rev, index) => (
+                                <div key={index}>
                                     <h4 className="text-black! font-medium">{rev.reviewerName}</h4>
-                                    <p className="font-light ">Rating: {rev.rating}</p> 
-                                    <p className="font-light t">Email: {rev.reviewerEmail}</p> 
-                                    <p className="font-light ">Comment: {rev.comment}</p> 
+                                    <p className="font-light ">Rating: {rev.rating}</p>
+                                    <p className="font-light t">Email: {rev.reviewerEmail}</p>
+                                    <p className="font-light ">Comment: {rev.comment}</p>
                                     <p className="font-light ">Date: {(rev.date).split('T')[0]}</p>
-                            </div>))}
-                        </p>
+                                </div>))}
+                            </div>
                         </div>
                         <div>
                             <h3>Product Dimensions:</h3>
@@ -199,7 +202,8 @@ export default function ProductDetail() {
 
                             <button
                                 className="text-red-5 cursor-pointer text-lg hover:underline"
-                                onClick={() => navigate(`/category/${product.category}`)}
+                                onClick={() => navigate(`/?category=${product.category}`)
+                                }
                             >
                                 See all
                             </button>

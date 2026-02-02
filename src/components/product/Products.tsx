@@ -2,21 +2,27 @@
 import { useProducts } from "../../hooks/useProducts";
 import { useQueryState } from "nuqs";
 import ProductCard from "./ProductCard";
-
+import ProductCardSkeleton from "./ProductCardSkeleton";
 export default function Products({ category }: { category?: string }) {
   const [search] = useQueryState("search");
 
-  const normalizedSearch =
-    search && search.trim().length > 0 ? search : undefined;
-
-  const { data: products, isLoading } = useProducts({
+  const {
+    data: products,
+    isLoading,
+  } = useProducts({
     category,
-    search: normalizedSearch,
+    search: search && search.trim() ? search : undefined,
   });
 
-
-
-  if (isLoading) return <p>Loading products...</p>;
+  if (isLoading) {
+    return (
+      <div className="flex flex-wrap gap-6">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <ProductCardSkeleton key={i} />
+        ))}
+      </div>
+    );
+  }
 
   if (products.length === 0) {
     return (
@@ -28,8 +34,8 @@ export default function Products({ category }: { category?: string }) {
 
   return (
     <div className="flex flex-wrap gap-6">
-      {products.map((p, i) => (
-        <ProductCard key={i} product={p} />
+      {products.map((p) => (
+        <ProductCard key={p.id} product={p} />
       ))}
     </div>
   );

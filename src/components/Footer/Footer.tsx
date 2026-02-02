@@ -7,7 +7,7 @@ export default function Footer() {
     return (
         <footer className="bg-white w-full">
 
-            <section className="max-w-[2800px] mx-auto">
+            <section className="max-w-700 mx-auto">
             {/* Top */}
             <div className="xl:px-20 px-8 md:px-10 py-10">
                 <div className="flex flex-col xl:flex-row gap-10 items-center xl:justify-start xl:gap-66 text-left">
