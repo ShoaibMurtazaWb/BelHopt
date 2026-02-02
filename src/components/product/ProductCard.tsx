@@ -19,7 +19,7 @@ export default function ProductCard({
   const isAdded = quantity > 0;
 
   return (
-    <div className="flex flex-col grow p-5 shrink-0 max-w-65  gap-4 justify-center items-center cursor-pointer" onClick={() => navigate(`/product/${product.id}`)}>
+    <div className="flex flex-col grow p-5 shrink-0 max-w-65 gap-4 justify-center items-center cursor-pointer" onClick={() => navigate(`/product/${product.id}`)}>
       {/* Product Image and Add Button */}
       <div className="flex w-full py-5 items-center relative ">
         <img width={200} height={200} src={product.thumbnail} alt={product.title}/>
@@ -64,7 +64,7 @@ export default function ProductCard({
       </div>
 
       {/* Product Details */}
-      <div className="w-full flex flex-col ">
+      <div className="w-full flex flex-col">
         {/* Price Div*/}
 
         <div>
@@ -75,7 +75,7 @@ export default function ProductCard({
           </p>
         </div>
 
-        <div>
+        <div className=" min-h-28 ">
           {/* Name */}
           <p className="text-xl text-dark-gray! font-crimson! mb-1">{product.title}</p>
 
@@ -89,7 +89,7 @@ export default function ProductCard({
         </div>
 
         {/* Stock Status */}
-        <div className="flex gap-3 mt-3">
+        <div className="flex gap-3 mt-3 ">
           {/* Stock Icon */}
           {product.availabilityStatus === "In Stock" && (
             <img className="w-5 h-5" src="/High Stock.svg" alt="In Stock" />

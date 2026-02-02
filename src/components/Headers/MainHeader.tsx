@@ -3,16 +3,24 @@ import { SearchIcon, ShoppingCart } from "lucide-react";
 import { useQueryState } from "nuqs";
 import Breadcrumbs from "../../components/Breadcrumbs/BreadCrumps";
 import Button from "../Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../context/auth-context";
 
 export default function MainHeader() {
-  const [auth, setAuth] = useState("Logout");
+  const [auth, setAuth] = useState("Login");
   const navigate = useNavigate();
   const [search, setSearch] = useQueryState("search");
   const {totalItems} = useCart()
 
-
+  const { isAuthenticated } = useAuth()
+  useEffect(() => {
+    if (isAuthenticated) {
+      setAuth("Logout");
+    } else {
+      setAuth("Login");
+    }
+  }, [isAuthenticated])
 
   return (
     <header className="w-full">
@@ -47,7 +55,7 @@ export default function MainHeader() {
             onClick={() => {
               localStorage.removeItem("accessToken");
               navigate("/login");
-              setAuth("Login");
+              setAuth("Logout");
             }}
           >
             {auth}

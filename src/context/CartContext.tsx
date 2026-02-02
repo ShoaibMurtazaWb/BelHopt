@@ -3,13 +3,15 @@ import type { CartItem, CartContextType } from "../lib/types";
 import useCartByUserId from "../hooks/useCartByUserId";
 import api from "../api/axios";
 import { useAuth } from "./auth-context";
+import { useNavigate } from "react-router-dom";
+import { showToast } from "../components/showToast";
 
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const { data } = useCartByUserId();
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (data?.products) {
       setItems(data.products);
@@ -20,12 +22,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
 
   const addItem = async (item: CartItem) => {
-    if (!user) return;
+    if (!user) {navigate("/login"); showToast({type:"info", variant:"light" , message: "Please login to continue shooping"},) ; return}
 
-    // No cart yet
+    // No cart yet  
     if (!data) {
       const res = await api.post("/carts/add", {
-        userId: user.id,
+        userId: user?.id,
         products: [{ id: item.id, quantity: 1 }],
       });
 
@@ -46,7 +48,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           { id: item.id, quantity: 1 },
         ];
 
-    const res = await api.put(`/carts/${data.id}`, {
+    const res = await api.put(`/carts/${data?.id}`, {
       merge: false,
       products: updatedProducts,
     });

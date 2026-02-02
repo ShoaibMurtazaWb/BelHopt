@@ -5,8 +5,12 @@ import { useProductsByCategory } from "../../hooks/useProducts";
 
 export default function CategoryProducts() {
     const { category } = useParams<{ category: string }>();
-    const {data} = useProductsByCategory(category)
-    const products = data ?? [];
+    const { data: products } = useProductsByCategory({
+        category,
+        page: 1,
+        limit: 12,
+    });
+
     return (
         <>
             <MainHeader />

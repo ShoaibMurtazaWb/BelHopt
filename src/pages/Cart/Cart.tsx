@@ -66,13 +66,13 @@ export default function Cart() {
                 {items.map((item) => (
                   <tr key={item.id} className="border-b">
                     {/* Product */}
-                    <td className="py-6">
+                    <td className="py-6" >
                       <div className="flex items-center gap-5">
-                        <div className="border p-5 border-gray-300">
-                          <img src={item.thumbnail} className="w-20" />
+                        <div className="border p-5 border-gray-300 hover:cursor-pointer hover:bg-gray-100 transition-colors" onClick={() => navigate(`/product/${item.id}`) }>
+                          <img src={item.thumbnail} className="w-20"  />
                         </div>
                         <div>
-                          <h2>{item.title}</h2>
+                          <h2 className="hover:text-red-500 transition-colors hover:cursor-pointer" onClick={() => navigate(`/product/${item.id}`) }>{item.title}</h2>
                           <p className="text-sm text-gray-500">
                             VIP {item.title}
                           </p>
@@ -85,21 +85,21 @@ export default function Cart() {
 
                     {/* Quantity */}
                     <td>
-                      <div className="flex items-center w-fit gap-4 bg-red-100 rounded-full">
+                      <div className="flex items-center justify-between w-32 gap-4 bg-red-100 rounded-full p-1">
                         <button
-                          className="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center"
+                          className="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors hover:cursor-pointer"
                           onClick={() => decrease(item.id)}
                         >
-                          <MinusIcon size={14} />
+                          <MinusIcon size={20} />
                         </button>
 
                         <span className="font-semibold">{item.quantity}</span>
 
                         <button
-                          className="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center"
+                          className="bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors hover:cursor-pointer"
                           onClick={() => increase(item.id)}
                         >
-                          <PlusIcon size={14} />
+                          <PlusIcon size={20} />
                         </button>
                       </div>
                     </td>

@@ -18,7 +18,7 @@ export default function Home() {
       <MainHeader />
       <HeroBanner />
 
-      <section className="flex max-w-mx-auto">
+      <section className="flex max-w-700 mx-auto">
         {/* Sidebar */}
         <aside className="w-110 flex flex-col gap-6 h-screen border-r border-l border-b pl-20 pr-1 py-10 border-light-gray">
           <h2>Categories</h2>

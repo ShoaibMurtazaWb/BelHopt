@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Button";
 import MainHeader from "../../components/Headers/MainHeader";
 import ProductCard from "../../components/product/ProductCard";
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useProduct, useProductsByCategory } from "../../hooks/useProducts";
 
@@ -11,9 +11,14 @@ export default function ProductDetail() {
     const { id: productId } = useParams<{ id: string }>();
     const [viewImage, setViewImage] = useState(0);
     const { data: product } = useProduct(Number(productId));
-    const { data: relatedProducts } = useProductsByCategory(product?.category);
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const { addItem } = useCart();
+    const { data: relatedProducts } = useProductsByCategory({
+        category: product?.category,
+        page: 1,
+        limit: 12,
+    });    const scrollRef = useRef<HTMLDivElement>(null);
+    const { items, addItem, increase, decrease } = useCart();
+    const cartItem = items.find(p => p.id === product?.id)
+
 
     const navigate = useNavigate();
 
@@ -119,20 +124,32 @@ export default function ProductDetail() {
                             </span>
                         </div>
 
+                        {/* Add to Cart Button */}
                         <div className="my-5">
-                            <Button
-                                onClick={() =>
-                                    addItem({
-                                        ...product,
-                                        quantity: 1,
-                                        total: product.price,
-                                        discountedTotal: product.price,
-                                    })
-                                }
-                            >
-                                Add to cart
-                            </Button>
+                            {cartItem ? (
+                            <div className="flex items-center gap-4 bg-red-100 rounded-full w-fit p-1">
+                                <button
+                                        className="bg-red-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors hover:cursor-pointer"
+                                    onClick={() => decrease(product.id)}
+                                >
+                                    <MinusIcon />
+                                </button>
+                                <span className="font-semibold text-lg w-4 text-center">
+                                    {cartItem?.quantity ?? 0}
+                                </span>
+                                <button
+                                        className="bg-red-500 text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors hover:cursor-pointer"
+                                    onClick={() => increase(product.id)}
+                                >
+                                    <PlusIcon />
+                                </button>
+                            </div>
+                            ) : (
+                                <Button onClick={() => addItem({ ...product, quantity: 1, total: product.price, discountedTotal: product.price })}>Add to Cart</Button>
+                            )}
                         </div>
+
+                        {/* Satisfaction Guaranteed */}
                         <div className="flex items-center p-10 gap-5 border-t border-gray-300">
                             <img width={28} src="/Certified.svg" alt="" />
                             <p className="text-blue-300! font-semibold font-crimson! text-xl">
@@ -202,7 +219,11 @@ export default function ProductDetail() {
 
                             <button
                                 className="text-red-5 cursor-pointer text-lg hover:underline"
-                                onClick={() => navigate(`/?category=${product.category}`)
+                                onClick={() =>
+                                    navigate({
+                                        pathname: "/",
+                                        search: `?category=${product.category}&page=1`,
+                                    })
                                 }
                             >
                                 See all

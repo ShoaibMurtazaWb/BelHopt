@@ -19,13 +19,24 @@ const transformPaginatedQueryResponse = (
 export function useProducts({
   category,
   search,
+  page = 1,
+  limit = 20  ,
 }: {
   category?: string;
   search?: string;
+  page?: number;
+  limit?: number;
 }) {
-  const { data, ...query } = useQuery({
-    queryKey: ["products", { category: category, search: search }],
-    queryFn: async () => await fetchProducts({ category, search }),
+  const { data, ...query } = useQuery<PaginatedProducts>({
+    queryKey: ["products", { category, search, page, limit }],
+    queryFn: () =>
+      fetchProducts({
+        category,
+        search,
+        page,
+        limit,
+      }),
+    placeholderData: (prev) => prev,
   });
 
   return {
@@ -33,6 +44,7 @@ export function useProducts({
     ...transformPaginatedQueryResponse(data),
   };
 }
+
 
 export const useProduct = (productId: number | undefined) => {
   return useQuery({
@@ -45,17 +57,30 @@ export const useProduct = (productId: number | undefined) => {
   });
 };
 
-export const useProductsByCategory = (category: string | undefined) => {
+export const useProductsByCategory = ({
+  category,
+  page = 1,
+  limit = 20,
+}: {
+  category?: string;
+  page?: number;
+  limit?: number;
+}) => {
+  const skip = (page - 1) * limit;
+
   const { data, ...query } = useQuery({
-    queryKey: ["products", { category: category ?? null }],
+    queryKey: ["products", { category, page, limit }],
     enabled: Boolean(category),
     queryFn: async () => {
       const res = await api.get<PaginatedProducts>(
-        "/products/category/" + category,
+        `/products/category/${category}`,
+        { params: { limit, skip } },
       );
       return res.data;
     },
+    placeholderData: (prev) => prev,
   });
+
   return {
     ...query,
     ...transformPaginatedQueryResponse(data),
